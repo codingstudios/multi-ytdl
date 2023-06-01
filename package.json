@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@discordjs/collection": "^1.5.1",
+    "chalk": "^4.1.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "googleapis": "^118.0.0",
+    "youtube-sr": "^4.3.4",
+    "ytdl-core": "^4.11.4"
+  },
+  "name": "multi-ytdl",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codingstudios/multi-ytdl.git"
+  },
+  "author": "Lee Chee Yong <tojoeleeofficial@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codingstudios/multi-ytdl/issues"
+  },
+  "homepage": "https://github.com/codingstudios/multi-ytdl#readme",
+  "description": ""
+}
