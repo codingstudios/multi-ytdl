@@ -14,7 +14,7 @@ This is a YouTube playlist audio (mp3) downloader that runs [ytdl-core](https://
 ## Setup
 1. Install ffmpeg
 2. Install the dependencies: `npm install`
-3. Configure the [`config.json`](./src/config.json)
+3. Configure the [config.json](./src/config.json) file
 4. Run the downloader: `npm start`
 
 > If you use Google Drive, you'll need to obtain your `CLIENT_ID` & `CLIENT_SECRET` from [console.developers.google.com](https://console.developers.google.com) then goto [developers.google.com/oauthplayground](https://developers.google.com/oauthplayground) to authorize the **Drive API v3** and obtain your `REFRESH_TOKEN`.
