@@ -20,21 +20,6 @@ const videos = [];
 start();
 // upload();
 
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground"
-);
-
-oauth2Client.setCredentials({
-  refresh_token: REFRESH_TOKEN,
-});
-
-const drive = google.drive({
-  version: "v3",
-  auth: oauth2Client,
-});
-
 const timeStart = performance.now();
 
 const getTime = (d) => {
@@ -50,12 +35,6 @@ const getTime = (d) => {
     pad(d.getUTCSeconds())
   );
 };
-
-async function upload() {
-  for (i in dir) {
-    await uploadFile(`./${DIRECTORY}/${dir[i]}`, `${dir[i].slice(0, -4)}.mp3`);
-  }
-}
 
 async function start() {
   console.log(
@@ -150,19 +129,39 @@ async function start() {
   }
 }
 
-async function uploadFile(filePath, name) {
-  try {
-    const response = await drive.files.create({
-      requestBody: {
-        name: `${name}`,
-      },
-      media: {
-        body: fs.createReadStream(`${path.join(__dirname, filePath)}`),
-      },
-    });
+async function upload() {
+  const oauth2Client = new google.auth.OAuth2(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    "https://developers.google.com/oauthplayground"
+  );
 
-    return response.data;
-  } catch (error) {
-    console.log(error.message);
+  oauth2Client.setCredentials({
+    refresh_token: REFRESH_TOKEN,
+  });
+
+  const drive = google.drive({
+    version: "v3",
+    auth: oauth2Client,
+  });
+  async function uploadFile(filePath, name) {
+    try {
+      const response = await drive.files.create({
+        requestBody: {
+          name: `${name}`,
+        },
+        media: {
+          body: fs.createReadStream(`${path.join(__dirname, filePath)}`),
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  for (i in dir) {
+    await uploadFile(`./${DIRECTORY}/${dir[i]}`, `${dir[i].slice(0, -4)}.mp3`);
   }
 }
