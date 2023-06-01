@@ -1,4 +1,11 @@
-const { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, DIRECTORY, PLAYLIST, thread_count } = require('./config.json');
+const {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REFRESH_TOKEN,
+  DIRECTORY,
+  PLAYLIST,
+  thread_count,
+} = require("./config.json");
 
 const chalk = require("chalk");
 const { Worker } = require("worker_threads");
@@ -11,6 +18,7 @@ const downloaded = [];
 const videos = [];
 
 start();
+// upload();
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -26,7 +34,6 @@ const drive = google.drive({
   version: "v3",
   auth: oauth2Client,
 });
-
 
 const timeStart = performance.now();
 
@@ -45,18 +52,26 @@ const getTime = (d) => {
 };
 
 async function upload() {
-for (i in dir) {
-        await uploadFile(`./${DIRECTORY}/${dir[i]}`, `${dir[i].slice(0, -4)}.mp3`);
-}
+  for (i in dir) {
+    await uploadFile(`./${DIRECTORY}/${dir[i]}`, `${dir[i].slice(0, -4)}.mp3`);
+  }
 }
 
 async function start() {
   console.log(
-    chalk`{bgBlue ${chalk.bold("  Multi Thread YouTube Playlist Downloader  ")}}\n   {yellow by Chee Yong Lee} {grey (https://github.com/CodingStudios/multi-ytdl)}`
+    chalk`{bgBlue ${chalk.bold(
+      "  Multi Thread YouTube Playlist Downloader  "
+    )}}\n   {yellow by Chee Yong Lee} {grey (https://github.com/CodingStudios/multi-ytdl)}`
   );
-  console.log(chalk`{bgCyan JOB STARTED} {yellow with ${thread_count} threads} {green [tracks are saved to ${chalk.bold(DIRECTORY)}]}`);
+  console.log(
+    chalk`{bgCyan JOB STARTED} {yellow with ${thread_count} threads} {green [tracks are saved to ${chalk.bold(
+      DIRECTORY
+    )}]}`
+  );
   try {
-    const dir = fs.readdirSync(`./${DIRECTORY}`).filter((file) => file.endsWith(".mp3"));
+    const dir = fs
+      .readdirSync(`./${DIRECTORY}`)
+      .filter((file) => file.endsWith(".mp3"));
     for (i in dir) {
       collection.add(dir[i].slice(0, -4));
     }
@@ -74,7 +89,10 @@ async function start() {
         videos.push(data.videos[i]);
       }
     }
-    if(videos.length == 0) return console.log(chalk`{bgGreen ${chalk.bold("  All tracks are downloaded  ")}}`);
+    if (videos.length == 0)
+      return console.log(
+        chalk`{bgGreen ${chalk.bold("  All tracks are downloaded  ")}}`
+      );
     for (let i = 0; i < videos.length; i += videos.length / thread_count) {
       jobs.push(videos.slice(i, i + videos.length / thread_count));
     }
@@ -133,18 +151,18 @@ async function start() {
 }
 
 async function uploadFile(filePath, name) {
-    try {
-      const response = await drive.files.create({
-        requestBody: {
-          name: `${name}`,
-        },
-        media: {
-          body: fs.createReadStream(`${path.join(__dirname, filePath)}`),
-        },
-      });
-  
-      return response.data;
-    } catch (error) {
-      console.log(error.message);
-    }
+  try {
+    const response = await drive.files.create({
+      requestBody: {
+        name: `${name}`,
+      },
+      media: {
+        body: fs.createReadStream(`${path.join(__dirname, filePath)}`),
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+  }
 }
